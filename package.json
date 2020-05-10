@@ -6,12 +6,21 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "clipboard": "^2.0.6",
+    "featherlight": "^1.7.14",
+    "highlightjs": "^9.16.2",
+    "jquery": "^3.5.0",
+    "jquery.2": "^1.0.0",
+    "jquery.scrollbar": "^0.2.11",
+    "learning-js": "^1.0.2",
+    "modernizr": "^3.10.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=5000 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

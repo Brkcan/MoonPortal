@@ -6,15 +6,7 @@ class Giris extends React.Component{
     return (
       <div>
       <HomePage />
-      <input
-        type="text"
-        className="form-control form-control-lg "
-        placeholder="Search"
-        name="filterText"
-        style={{width: "500px",marginLeft:500,marginTop:40}}
-        value={this.state.filterText}
-        onChange={this.onChangeFilterText}
-      />
+      
       <section id="body">
       <div id="overlay"></div>
 

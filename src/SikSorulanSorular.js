@@ -63,23 +63,46 @@ let soru7 = [{
   soru:'20- Siparişler akmıyor. Aktarımda bir problem mi var?',
   soru1:'21- El terminaline düşen sevk sayısı ile sipariş sayısı birbirini tutmuyor ?',
   soru2:'22- Kargo adresi yanlış çıkıyor ?',
-  text:'Şuan Netsis sürümünden kaynaklı hata alıyoruz. Bir job yazdım Netsis’de sipariş tipi onaysız olan siparişleri onaylıya çekiyorum. Connector kaynaklı hatalar gelmemeye başladı son 15 gündür diyebilirim. Sipariş oluşmamış ise Gökhan a yönlendiriyorum.',
-  text1:'Siparişleri kontrol ediyorum. %90 sipariş oluşmamış oluyor.',
-  text2:'Netsis’e kargo adresi akıyor ancak Trendyol’da sipariş adresinde güncelleme olduğu için Netsis’de bu adres güncellenmiyor.(Trendyol tarafından güncelleştirmeleri aldığımızda Netsis aktarımında edit yapacağım.)',
+  text:'Smart’tan sipariş ve sevk raporları kontrol edilir. Sorun var ise destek@greyder.com adresine mail atılır.',
+  text1:'Smart’tan sipariş ve sevk raporları kontrol edilir. Sorun var ise destek@greyder.com adresine mail atılır. ',
+  text2:'Bunun sebebi müşteri adresini sipariş işleme alındıktan sonra değişmesidir.',
+  text3:'Trendyol için: https://moon.greyder.com/trndGreyder/getOneOrder/{orderNumber}',
+  text4:'Greyder.com için: https://moon.greyder.com/greyderCom/getOneOrderDetails/{orderNumber}',
+  text5:'Fonksiyonları ile sipariş sıfırdan çekilebilir.Siparişin sıfırdan çekilebilmesi için sipariş üzerinde işlem yapılmamış olması gerekmektedir. Aksi takdirde işlemlere baştan başlanması gerekmektedir.',
 }]
 let soru8 = [{
   id:1,
-  soru:'23- Sevkler el terminaline düşmedi, kontrol eder misiniz?',
-  soru1:'24- Umo yazdırmıyor, yazdırırken hata veriyor?',
-  soru2:'25- Yapılan DAT işleminin bakiye Divaposta gözükmüyor ?',
-  text:'Ekte ilettiğiniz Divaordernumber ın, Tblsipatra tablosundan siparişi bulunur ve sevk tablosundan hatasına bakılarak iptal edilir. Bunun üzerine tekrar sevk ekranına düşürülür. ',
-  text1:'Ups sisteminde genel bir arıza vardır. Veya UPS o lokasyona destek vermiyordur.',
-  text2:'Divaposa aktarımda sıkıntı olmuştur. Connector kontrol edilmeli. ',
+  soru:'23-	Kargo takip numarası akmıyor. ? ',
+  text:'Bu sorun yaşandığında takip edilecek sıralama aşağıdaki gibidir:'+
+        'Kargoya çıkılacak ürün el terminali ile mi toplanmıştır?',
+      text1:'Cevap evet ise:',
+      text2:'Umo başarılı bir şekilde çıkmış mıdır?' +
+          'Eğer çıkmadı ise;' +
+          'UPS servisinde sorun yaşanmıştır. Servis sorunu giderildikten sonra umo tekrar bastırılmalıdır.'+
+           'Eğer çıktı ise;'+
+
+           'Moon Sales veya İnternet Sevk Raporu çekilerek kargo kodunun rapora gelip gelmediği kontrol edilir.'+
+
+            'Gelmedi ise destek@greyder.com adresine detaylı bir mail atılarak yardım istenir.'+
+              'Kontrol sonucu kargo kodu geldiyse fakat ilgili platforma akmadı ise;' +
+              'Yarım saat ara ile çalışan kargo kodu gönderme servisi mevcuttur. Yarım saatten sonra kodun gönderimi tekrar denenecektir.',
+        text3:'Eğer kod gelmeyen platform RND tarafı ise;' +
+        'RND tarafında Database update yapılmaktadır. Lock hatası alınmıştır. Bir sonraki denemede kod siparişe işlenecektir.',
+        text4:    'Eğer kod gelmeyen platform Trendyol ise; Raporda alınmış hata görünmektedir. '+
+          '  Buna göre Trendyol a başvurulması gerekmektedir.Bunun sebebi Trendyol siparişinin kargo takip kodu almaya müsait olmaması veya daha önce yüklenmiş olması olabilmektedir. '+
+            'Sorunun çözümü trendyoldadır.Eğer ürün manuel olarak toplandı ise kargo kodu excel ile sisteme yüklenmektedir. ',
+        text5: 'Kargo kodunun excel ile yüklenip yüklenmediği rapor çekilerek kontrol edilmelidir. '+
+          'Eğer yüklenmediyse excel ile tekrar içeri atılmalıdır.',
 }]
 let soru9 = [{
   id:1,
-  soru:'26- Kampanya birleştirilebilir mi ? ',
-  text:'Kısıtlar doğru verilirse, Kampanya üzerine Avantaj kodu ve ikinci kampanya belgeye uygulanabilir. ',
+  soru:'24- Depolar Arası Transfer işleminde, bakiye Divapos ta gözükmüyor.',
+  text:'Smart’tan Stok Bakiye ve Stok Hareket Raporları kontrol edilir. Eğer burada stok var, Divapos’ta stok yok ise destek@greyder.com adresine mail atılır.'
+}]
+let soru10 = [{
+  id:1,
+  soru:'25- İnternet Sevk Raporu’nu nasıl kullanmalıyım?',
+  text:'Bu rapor siparişin oluşturulma tarihi kısıtına göre çalışmaktadır. Siparişi ne zaman oluşturdu iseniz o tarihi seçerek o siparişlerin Netsis’deki durumlarını görebilirsiniz.'
 }]
 class SikSorulanSorular extends React.Component{
   constructor(){
@@ -177,24 +200,32 @@ class SikSorulanSorular extends React.Component{
         item.text.toLowerCase().indexOf(query) >= 0 ||
         item.text1.toLowerCase().indexOf(query) >= 0 ||
         item.text2.toLowerCase().indexOf(query) >= 0 ||
+        item.text3.toLowerCase().indexOf(query) >= 0 ||
+        item.text4.toLowerCase().indexOf(query) >= 0 ||
+        item.text5.toLowerCase().indexOf(query) >= 0 ||
         item.soru.toLowerCase().indexOf(query) >= 0 ||
         item.soru1.toLowerCase().indexOf(query) >= 0 ||
         item.soru2.toLowerCase().indexOf(query) >= 0
         )
     })
+
     const filtered8 = soru8.filter(item =>{
       const query = this.state.filterText.toLowerCase();
 
       return(
         item.text.toLowerCase().indexOf(query) >= 0 ||
-        item.text1.toLowerCase().indexOf(query) >= 0 ||
-        item.text2.toLowerCase().indexOf(query) >= 0 ||
-        item.soru.toLowerCase().indexOf(query) >= 0 ||
-        item.soru1.toLowerCase().indexOf(query) >= 0 ||
-        item.soru2.toLowerCase().indexOf(query) >= 0
+        item.soru.toLowerCase().indexOf(query) >= 0
         )
     })
     const filtered9 = soru9.filter(item =>{
+      const query = this.state.filterText.toLowerCase();
+
+      return(
+        item.text.toLowerCase().indexOf(query) >= 0 ||
+        item.soru.toLowerCase().indexOf(query) >= 0
+        )
+    })
+    const filtered10 = soru10.filter(item =>{
       const query = this.state.filterText.toLowerCase();
 
       return(
@@ -660,6 +691,15 @@ class SikSorulanSorular extends React.Component{
                         <div>
                           <p>{don.text2}</p>
                         </div>
+                        <div>
+                          <p>{don.text3}</p>
+                        </div>
+                        <div>
+                          <p>{don.text4}</p>
+                        </div>
+                        <div>
+                          <p>{don.text5}</p>
+                        </div>
                       </div>
                       </section>
                     )
@@ -679,29 +719,20 @@ class SikSorulanSorular extends React.Component{
                         <div>
                           <p>{don.text}</p>
                         </div>
-                      </div>
-                      <hr />
-                      <div>
-                        <p>
-                          {don.soru1}
-                        </p>
-                      </div>
-                      <div class="notices red">
-                        <p>Cevap : </p>
                         <div>
                           <p>{don.text1}</p>
                         </div>
-                      </div>
-                      <hr />
-                      <div>
-                        <p>
-                          {don.soru2}
-                        </p>
-                      </div>
-                      <div class="notices red">
-                        <p>Cevap : </p>
                         <div>
                           <p>{don.text2}</p>
+                        </div>
+                        <div>
+                          <p>{don.text3}</p>
+                        </div>
+                        <div>
+                          <p>{don.text4}</p>
+                        </div>
+                        <div>
+                          <p>{don.text5}</p>
                         </div>
                       </div>
                       </section>
@@ -722,6 +753,27 @@ class SikSorulanSorular extends React.Component{
                         <div>
                           <p>{don.text}</p>
                         </div>
+
+                      </div>
+                      </section>
+                    )
+                  })
+                }
+                {
+                  filtered10.map(don => {
+                    return (
+                      <section>
+                      <div>
+                        <p>
+                          {don.soru}
+                        </p>
+                      </div>
+                      <div class="notices red">
+                        <p>Cevap : </p>
+                        <div>
+                          <p>{don.text}</p>
+                        </div>
+
                       </div>
                       </section>
                     )
